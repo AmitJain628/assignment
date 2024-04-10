@@ -7,7 +7,7 @@ import { Conversation, } from 'src/schema/conversation.schema';
 import { IConversation } from 'src/interface/conversation.interface';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.OPEN_API_KEY})
+const openai = new OpenAI({ apiKey: process.env.OPEN_API_KEY || ''})
 
 @Injectable()
 export class ConversationService {
