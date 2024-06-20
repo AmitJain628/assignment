@@ -1,0 +1,29 @@
+# Triggers
+name: Code Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+# Functions
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env && echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env && echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
+
+      - name: Build docker image
+        run: docker build -t icondigitalsg/icon-digital-app .
+
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Publish image to docker hub
+        run: docker push icondigitalsg/icon-digital-app:latest
+
